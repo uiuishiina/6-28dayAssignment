@@ -9,10 +9,11 @@ public class Enemy : MonoBehaviour
     /// プレイヤー  
     /// </summary>  
     [SerializeField] private Player player_ = null;
-	public Transform playertransform { get; private set; }
-	[SerializeField] private float viewRadian = 30.0f;   /// <summary>  
-												/// ワールド行列   
-												/// </summary>  
+	[SerializeField] private float viewRadian = 30.0f;
+	public bool playerbool { get; private set; } = false;
+	/// <summary>  
+	/// ワールド行列   
+	/// </summary>  
 	private Matrix4x4 worldMatrix_ = Matrix4x4.identity;
 
     /// <summary>  
@@ -38,10 +39,11 @@ public class Enemy : MonoBehaviour
     /// </summary>  
     public void Update()
     {
-		var normalZ = new Vector3(0, 0, 1);
-		var enemyForward = worldMatrix_ * normalZ;
-
-		// プレイヤーの視野角の Cos 値
+		//var normalZ = new Vector3(0, 0, 1);
+		//var enemyForward = transform.forward;
+		//var enemyForward = worldMatrix_ * normalZ;
+		var enemyForward = transform.forward;
+		// エネミーの視野角の Cos 値
 		var enemyViewCos = Mathf.Cos(viewRadian);
 
 		// ターゲット可能な敵の一覧を更新する
@@ -54,12 +56,17 @@ public class Enemy : MonoBehaviour
 		// 内積の結果がプレイヤーの視野角より大きい場合はターゲット出来る
 		if (enemyViewCos <= dot)
 		{
-			playertransform = player_.transform;
+			playerbool = true;
 		}
 		else
 		{
-			playertransform = null;
-		}
+			playerbool = false;
 		
+		}
+		EnemyMove();
+	}
+	void EnemyMove()
+	{
+
 	}
 }
